@@ -6,7 +6,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-    stpes:
+    steps:
       - name: Checkout code
         unset: actions/checkout@v4
 

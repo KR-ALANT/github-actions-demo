@@ -4,6 +4,6 @@ on: [push]
 jobs:
   build:
     runs-on: ubuntu-latest
-    stpes:
+    steps:
       - name: say Hello
         run: echo "Hello, World!"

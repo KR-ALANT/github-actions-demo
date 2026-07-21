@@ -1,0 +1,9 @@
+name: Hello World Workflow
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    stpes:
+      - name: say Hello
+        run: echo "Hello, World!"

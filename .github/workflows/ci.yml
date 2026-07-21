@@ -1,0 +1,14 @@
+name: CI
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    stpes:
+      - name: Checkout code
+        unset: actions/checkout@v4
+
+      - name: List files
+        run: ls -la

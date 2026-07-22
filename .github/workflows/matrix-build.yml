@@ -1,0 +1,43 @@
+name: Matrix Build
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    #strategy: 빌드 전략 정의
+    strategy:
+      #matrix: 행렬 변수들 정의
+      matrix:
+        # node-version: 변수 이름이며 값의 배열들을 할당함.
+        # GitHub Actions는 build작업을 각 값에 대해 세 번 실행함
+        node-version: [18, 20, 22, 24]
+    
+    steps:
+      - uses: actions/checkout@v4
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          # 단계 내에서 현재 행렬 값에 접근할 수 있게 해줌
+          node-version: ${{ matrix.node-version }}
+      - name: Install dependencies
+        run: npm Install
+      - name: Build project
+        run: |
+          mkdir dist
+          echo "This is the build artifact" > dist/build.txt
+      - name: Run tests
+        run: npm test
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: build assets-${{ matrix.node-version }}
+          path: dist
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with: node-version: ${{ matrix.node-version }}
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-assets-${{ matrix.node-version }}
+          path: dist

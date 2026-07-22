@@ -21,7 +21,7 @@ jobs:
           # 단계 내에서 현재 행렬 값에 접근할 수 있게 해줌
           node-version: ${{ matrix.node-version }}
       - name: Install dependencies
-        run: npm Install
+        run: npm install
       - name: Build project
         run: |
           mkdir dist

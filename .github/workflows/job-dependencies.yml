@@ -1,0 +1,44 @@
+name: Job Dependencies
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+      - name: Install Dependencies
+        run: npm install
+      - name: Run tests
+        run: npm test
+      - name: Build project
+        run: |
+          mkdir dist
+          echo "Build artifact created at $(date)" > dist/build.txt
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist-files
+          path: dist
+  
+  deploy:
+    runs-on: ubuntu-latest
+    # needs: build는 GitHub Actions에게 작업이 build 작업의 성공적인 완료에 의존한다는 것을 알려줌
+    needs: build
+    steps:
+      - name: Download artifact
+        # uses: actions/download-artifact@v4 작업들은 서로 다른 가상 머신에서 실행되므로 파일 시스템을 공유하지 않음
+        # build 작업에서 생성된 dist폴더를 얻으려면, 이전에 업로드한 아티팩트를 다운해야 함
+        uses: actions/download-artifact@v4
+        with:
+          # name: dist-files 업로드 단계에서 사용된 이름과 일치 해야 함
+          name: dist-files
+          path: dist
+      - name: Deploy project
+        run: |
+          echo "Deploying project..."
+          ls -R dist
+          echo "Deployment successful!"
